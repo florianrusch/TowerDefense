@@ -15,6 +15,10 @@ namespace Level
         public Text statsKilledEnemiesText;
         private int _killedEnemies = 0;
         private const string StatsKilledEnemiesTextFormat = "Kills: {0}";
+        
+        public Text statsLivingEnemiesText;
+        private int _livingEnemies = 0;
+        private const string StatsLivingEnemiesTextFormat = "Living: {0}";
     
         private void Awake()
         {
@@ -41,6 +45,14 @@ namespace Level
         {
             Money += money;
             _killedEnemies++;
+            _livingEnemies--;
+        
+            UpdateStats();
+        }
+
+        public void IncreaseLivingEnemies()
+        {
+            _livingEnemies++;
         
             UpdateStats();
         }
@@ -49,6 +61,7 @@ namespace Level
         {
             statsMoneyText.text = string.Format(StatsMoneyTextFormat, Money);
             statsKilledEnemiesText.text = string.Format(StatsKilledEnemiesTextFormat, _killedEnemies);
+            statsLivingEnemiesText.text = string.Format(StatsLivingEnemiesTextFormat, _livingEnemies);
         }
     }
 }
