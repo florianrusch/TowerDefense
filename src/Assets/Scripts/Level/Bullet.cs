@@ -15,16 +15,17 @@ namespace Level
         public string enemyTag = "Enemy";
 
         private Transform _target;
+        private Enemy _targetEnemy;
 
         public void Seek(Transform target)
         {
             _target = target;
+            _targetEnemy = target.GetComponent<Enemy>();
         }
 
-        // Update is called once per frame
         private void Update()
         {
-            if (_target == null)
+            if (_target == null || _targetEnemy.health <= 0)
             {
                 Destroy(gameObject);
                 return;
@@ -57,22 +58,20 @@ namespace Level
             }
             else
             {
-                Damage(_target);
+                Damage(_targetEnemy);
             }
 
             Destroy(gameObject);
         }
 
-        private void Damage(Component enemyTransform)
+        private void Damage(Enemy target)
         {
-            Enemy enemy = enemyTransform.GetComponent<Enemy>();
-
-            if (enemy != null)
+            if (target != null)
             {
-                enemy.ApplyDamage(damage);
+                target.ApplyDamage(damage);
             }
         }
-    
+
         private void Explode()
         {
             Collider[] colliders = Physics.OverlapSphere(transform.position, explosionRadius);
@@ -80,7 +79,7 @@ namespace Level
             {
                 if (explosionTarget.CompareTag(enemyTag))
                 {
-                    Damage(explosionTarget.transform);
+                    Damage(explosionTarget.transform.GetComponent<Enemy>());
                 }
             }
         }

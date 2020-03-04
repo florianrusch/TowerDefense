@@ -12,13 +12,13 @@ namespace Level
         private int _waypointIndex = 0;
         private PlayerStats _playerStats;
 
-        private void Start ()
+        private void Start()
         {
             _target = Waypoints.points[0];
             _playerStats = PlayerStats.instance;
         }
 
-        private void Update ()
+        private void Update()
         {
             Vector3 dir = _target.position - transform.position;
             transform.Translate(dir.normalized * (speed * Time.deltaTime), Space.World);
@@ -45,8 +45,8 @@ namespace Level
         {
             health -= damage;
 
-            if (!(health <= 0)) return;
-    
+            if (health > 0) return;
+
             _playerStats.KilledEnemy(earning);
             Destroy(gameObject);
         }
