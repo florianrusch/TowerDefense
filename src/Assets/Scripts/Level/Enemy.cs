@@ -1,12 +1,19 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 namespace Level
 {
     public class Enemy : MonoBehaviour
     {
-        public float speed = 10f;
-        public float health = 100f;
+        public float startSpeed = 10f;
+        public float startHealth = 100f;
         public int earning = 5;
+
+        [Header("Unity Setup Fields")]
+        public Transform healthBar;
+        
+        private float _speed;
+        private float _health;
 
         private Transform _target;
         private int _waypointIndex = 0;
@@ -14,6 +21,8 @@ namespace Level
 
         private void Start()
         {
+            _speed = startSpeed;
+            _health = startHealth;
             _target = Waypoints.points[0];
             _playerStats = PlayerStats.instance;
         }
@@ -21,7 +30,7 @@ namespace Level
         private void Update()
         {
             Vector3 dir = _target.position - transform.position;
-            transform.Translate(dir.normalized * (speed * Time.deltaTime), Space.World);
+            transform.Translate(dir.normalized * (_speed * Time.deltaTime), Space.World);
 
             if (Vector3.Distance(transform.position, _target.position) <= 0.6f)
             {
@@ -29,6 +38,8 @@ namespace Level
             }
         }
 
+        public float Health => _health;
+        
         private void GetNextWaypoint()
         {
             if (_waypointIndex >= Waypoints.points.Length - 1)
@@ -43,9 +54,12 @@ namespace Level
 
         public void ApplyDamage(int damage)
         {
-            health -= damage;
+            _health -= damage;
+            
+            // Update healthBar
+            healthBar.GetComponent<Image>().fillAmount = _health / startHealth;
 
-            if (health > 0) return;
+            if (_health > 0) return;
 
             _playerStats.KilledEnemy(earning);
             Destroy(gameObject);

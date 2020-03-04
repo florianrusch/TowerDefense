@@ -25,7 +25,7 @@ namespace Level
 
         private void Update()
         {
-            if (_target == null || _targetEnemy.health <= 0)
+            if (_target == null || _targetEnemy.Health <= 0)
             {
                 Destroy(gameObject);
                 return;
