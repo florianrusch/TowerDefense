@@ -15573,7 +15573,7 @@ MonoBehaviour:
   startMoney: 400
   statsMoneyText: {fileID: 2103364875}
   statsKilledEnemiesText: {fileID: 1049580535}
-  statsLivingEnemiesText: {fileID: 0}
+  statsLivingEnemiesText: {fileID: 1728089443}
 --- !u!1 &1565114723
 GameObject:
   m_ObjectHideFlags: 0
