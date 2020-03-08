@@ -23,7 +23,13 @@ namespace Level
         {
             _playerStats = PlayerStats.instance;
         }
-    
+
+        public TurretBlueprint TurretToBuild
+        {
+            get => _turretToBuild;
+            set => _turretToBuild = value;
+        }
+
         public bool CanBuild => _turretToBuild != null;
         public bool HasMoney => _playerStats.Money >= _turretToBuild.cost;
 
@@ -38,14 +44,10 @@ namespace Level
             _playerStats.PurchasedTurret(_turretToBuild.cost);
         
             GameObject turret = Instantiate(_turretToBuild.prefab, node.GetBuildPosition(), Quaternion.identity);
+            turret.GetComponent<Turret>().allowedToShoot = true;
             node.turret = turret;
 
             Debug.Log("Turret build! Money left: " + _playerStats.Money);
-        }
-
-        public void SelectTurretToBuild (TurretBlueprint turret)
-        {
-            _turretToBuild = turret;
         }
     }
 }

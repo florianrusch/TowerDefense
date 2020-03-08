@@ -4,6 +4,8 @@ namespace Level
 {
     public class Turret : MonoBehaviour
     {
+        public bool allowedToShoot = true;
+        
         [Header("Upgradables")]
         public float fireRate = 0.5f;
         public float range = 15f;
@@ -16,7 +18,7 @@ namespace Level
         public string enemyTag = "Enemy";
 
         [Header("Debugging")]
-        public float fireCountdown = 0f;
+        public float fireCountdown;
 
         private Transform _target;
 
@@ -54,21 +56,21 @@ namespace Level
         // Update is called once per frame
         private void Update()
         {
-            fireCountdown -= Time.deltaTime;
-        
-            if (_target == null)
-                return;
+            if (!_target) return;
 
             Vector3 dir = _target.position - transform.position;
             Quaternion lookRotation = Quaternion.LookRotation(dir);
             Vector3 rotation = Quaternion.Lerp(partToRotate.rotation, lookRotation, Time.deltaTime * rotationSpeed).eulerAngles;
             partToRotate.rotation = Quaternion.Euler(0f, rotation.y, 0f);
 
-            if (fireCountdown <= 0f)
-            {
-                Shoot();
-                fireCountdown = 1f / fireRate;
-            }
+            if (!allowedToShoot) return;
+            
+            fireCountdown -= Time.deltaTime;
+
+            if (!(fireCountdown <= 0f)) return;
+            
+            Shoot();
+            fireCountdown = 1f / fireRate;
         }
 
         private void Shoot()
@@ -76,8 +78,7 @@ namespace Level
             GameObject bulletGo = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
             Bullet bullet = bulletGo.GetComponent<Bullet>();
 
-            if (bullet != null)
-                bullet.Seek(_target);
+            bullet.Seek(_target);
         }
 
         private void OnDrawGizmosSelected()

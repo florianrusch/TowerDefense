@@ -13,6 +13,8 @@ namespace Level
         [Header("Optional")]
         public GameObject turret;
 
+        private GameObject _previewTurret;
+
         private Renderer _rend;
 
         private BuildManager _buildManager;
@@ -33,15 +35,22 @@ namespace Level
 
         private void OnMouseEnter()
         {
+            if (turret) return;
+            
             if (EventSystem.current.IsPointerOverGameObject() || !(_buildManager.CanBuild && _buildManager.HasMoney))
                 return;
         
             _rend.material.color = hoverColor;
+            
+            _previewTurret = Instantiate(_buildManager.TurretToBuild.prefab, GetBuildPosition(), Quaternion.identity);
+            _previewTurret.GetComponent<Turret>().allowedToShoot = false;
         }
 
         private void OnMouseExit()
         {
             _rend.material.color = _startColor;
+            
+            RemovePreviewTurret();
         }
 
         private void OnMouseUpAsButton()
@@ -51,11 +60,22 @@ namespace Level
         
             if (turret != null)
             {
-                Debug.LogError("Can't build there! - TODO: Display on screen.");
                 return;
             }
-        
+
+            _rend.material.color = _startColor;
+            
+            RemovePreviewTurret();
             _buildManager.BuildTurretOn(this);
+        }
+
+        private void RemovePreviewTurret()
+        {
+            if (_previewTurret)
+            {
+                Destroy(_previewTurret.gameObject);
+                _previewTurret = null;
+            }
         }
     }
 }

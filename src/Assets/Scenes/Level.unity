@@ -15545,9 +15545,6 @@ MonoBehaviour:
       amount: 10
     initialDelay: 15
   statsWaveNumberText: {fileID: 2053337303}
-  spawnedWaves: 0
-  isIncoming: 0
-  spawnedEnemySeriesForWave: 0
 --- !u!4 &1562651266
 Transform:
   m_ObjectHideFlags: 0

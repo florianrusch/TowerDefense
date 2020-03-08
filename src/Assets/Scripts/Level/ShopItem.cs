@@ -36,7 +36,7 @@ namespace Level
     
         public void SelectTurret()
         {
-            _buildManager.SelectTurretToBuild(turret);
+            _buildManager.TurretToBuild = turret;
         }
     }
 }
