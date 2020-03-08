@@ -5703,7 +5703,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1562651265}
-        m_MethodName: StartNewWave
+        m_MethodName: ManualStartWave
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -15525,8 +15525,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnPoint: {fileID: 252600346}
   countdownText: {fileID: 628940586}
-  countdown: 0
-  countdownStarted: 1
   waves:
   - enemies:
     - enemy: {fileID: 6659382709242767351, guid: 2cc1b562ce6734bad85f61caa5b5bf3d,

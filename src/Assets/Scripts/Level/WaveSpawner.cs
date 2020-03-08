@@ -67,6 +67,11 @@ namespace Level
             return (_spawnedWaves == waves.Length);
         }
 
+        public void ManualStartWave()
+        {
+            _countdown = 0;
+        }
+        
         private void StartWave()
         {
             _isCountdownStarted = false;
