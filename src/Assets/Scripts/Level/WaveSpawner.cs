@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,18 +7,21 @@ namespace Level
 {
     public class WaveSpawner : MonoBehaviour
     {
-        public Transform enemyPrefab;
         public Transform spawnPoint;
 
-        public Text waveCountdownText;
-        private const string WaveCountdownTextFormat = "{0} until incoming...";
-        private const string WaveIncomingTextFormat = "!! Incoming !!";
-        private float _countdown = 5f;
-        private bool _isCountdownEnabled = true;
+        public Text countdownText;
+        private const string CountdownTextFormat = "{0} until incoming...";
+        private const string CountdownIncomingTextFormat = "!! Incoming !!";
+        private float _countdown;
+        private bool _isCountdownStarted = true;
 
+        public Wave[] waves;
         public Text statsWaveNumberText;
         private const string StatsWaveNumberTextFormat = "Wave: {0}";
-        private int _waveNumber = 0;
+        private int _spawnedWaves;
+        private int _spawnedEnemySeriesForWave;
+
+        private bool _isIncoming;
 
         private PlayerStats _playerStats;
 
@@ -25,71 +29,100 @@ namespace Level
         {
             _playerStats = PlayerStats.instance;
 
-            waveCountdownText.text = string.Format(WaveCountdownTextFormat, $"{_countdown:00.00}");
-            statsWaveNumberText.text = string.Format(StatsWaveNumberTextFormat, _waveNumber);
+            // Init countdown for first wave
+            _countdown = waves[0].initialDelay;
+            _isCountdownStarted = true;
+            
+            UpdateCountdownText();
+            UpdateStatsWaveNumberText();
         }
     
         private void Update()
         {
-            if (!_isCountdownEnabled) return;
-            
-            if (_countdown <= 0f)
+            if (_isCountdownStarted)
             {
-                _isCountdownEnabled = false;
-                waveCountdownText.text = WaveIncomingTextFormat;
+                _countdown -= Time.deltaTime;
                 
-                StartCoroutine(SpawnWave());
+                UpdateCountdownText();
+
+                if (_countdown > 0f) return;
                 
+                StartWave();
                 return;
             }
-        
-            _countdown -= Time.deltaTime;
-        
-            float timeUntilNextWave = Mathf.Clamp(_countdown, 0f, max: Mathf.Infinity);
-            waveCountdownText.text = timeUntilNextWave > 0 ? string.Format(WaveCountdownTextFormat, $"{timeUntilNextWave:00.00}") : WaveIncomingTextFormat;
-        }
 
-        public void StartNewWave()
-        {
-            if (!_isCountdownEnabled) return;
+            if (_isIncoming)
+                return;
+
+            if (WasLastWave())
+                return;
             
-            _countdown = -1f;
+            // Init countdown for next wave
+            _countdown = waves[_spawnedWaves].initialDelay;
+            _isCountdownStarted = true;
         }
 
-        private IEnumerator SpawnWave()
+        private bool WasLastWave()
         {
-            IncreaseWaveNumber();
+            return (_spawnedWaves == waves.Length);
+        }
 
-            for (int i = 0; i < _waveNumber; i++)
+        private void StartWave()
+        {
+            _isCountdownStarted = false;
+            _spawnedEnemySeriesForWave = 0;
+            _isIncoming = true;
+            
+            Wave wave = waves[_spawnedWaves];
+            
+            foreach (var enemySeries in wave.enemies)
             {
-                SpawnEnemy();
-                yield return new WaitForSeconds(GetTimeBetweenEnemySpawn());
+                StartCoroutine(SpawnEnemySeries(enemySeries));
             }
+
+            _spawnedWaves++;
             
-            _isCountdownEnabled = true;
-            _countdown = GetInitialCountdownForWave(_waveNumber);
+            UpdateStatsWaveNumberText();
         }
 
-        private void SpawnEnemy()
+        private IEnumerator SpawnEnemySeries(Wave.EnemySeries waveEnemies)
         {
-            Instantiate(enemyPrefab, spawnPoint.position, spawnPoint.rotation);
-            _playerStats.IncreaseLivingEnemies();
-        }
-        
-        private float GetTimeBetweenEnemySpawn()
-        {
-            return 0.8f;
+            for (int i = 0; i < waveEnemies.amount; i++)
+            {
+                Instantiate(waveEnemies.enemy, spawnPoint.position, spawnPoint.rotation);
+                _playerStats.IncreaseLivingEnemies();
+                yield return new WaitForSeconds(1f / waveEnemies.rate);
+            }
+
+            _spawnedEnemySeriesForWave++;
+            if (_spawnedEnemySeriesForWave == waves[_spawnedWaves-1].enemies.Length)
+                _isIncoming = false;
         }
 
-        private float GetInitialCountdownForWave(int waveNumber)
+        private void UpdateCountdownText()
         {
-            return 10f;
+            float timeUntilNextWave = Mathf.Clamp(_countdown, 0f, max: Mathf.Infinity);
+            countdownText.text = timeUntilNextWave > 0 ? string.Format(CountdownTextFormat, $"{timeUntilNextWave:00.00}") : CountdownIncomingTextFormat;
         }
 
-        private void IncreaseWaveNumber()
+        private void UpdateStatsWaveNumberText()
         {
-            _waveNumber++;
-            statsWaveNumberText.text = string.Format(StatsWaveNumberTextFormat, _waveNumber);
+            statsWaveNumberText.text = string.Format(StatsWaveNumberTextFormat, _spawnedWaves);
+        }
+
+        [Serializable]
+        public class Wave
+        {
+            public EnemySeries[] enemies;
+            public float initialDelay = 10f;
+
+            [Serializable]
+            public class EnemySeries
+            {
+                public Transform enemy;
+                public float rate = 1f;
+                public int amount = 1;
+            }
         }
     }
 }
