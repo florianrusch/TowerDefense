@@ -164,7 +164,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0, y: 53.819946}
+  m_AnchoredPosition: {x: 0, y: 53.819824}
   m_SizeDelta: {x: 0, y: 107.65}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1057329
@@ -5601,7 +5601,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0.0000038146973, y: -14.599976}
+  m_AnchoredPosition: {x: 0.0000038146973, y: -14.600098}
   m_SizeDelta: {x: 330, y: 45}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &628940585
@@ -6210,7 +6210,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 3.575e-42, y: 1.01e-43, z: NaN, w: 0}
+  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
@@ -9770,7 +9770,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 95, y: -52.170044}
+  m_AnchoredPosition: {x: 95, y: -52.16992}
   m_SizeDelta: {x: 190, y: 104.43}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1036856124
@@ -15548,6 +15548,52 @@ MonoBehaviour:
         type: 3}
       rate: 1
       amount: 10
+    initialDelay: 15
+  - enemies:
+    - enemy: {fileID: 6659382709242767351, guid: 199c4611b9dcb485e8846e65cea0a3ed,
+        type: 3}
+      rate: 1
+      amount: 10
+    initialDelay: 15
+  - enemies:
+    - enemy: {fileID: 6659382709242767351, guid: 3a76195b775a140769bf6c222e6ca33b,
+        type: 3}
+      rate: 0.3
+      amount: 10
+    initialDelay: 15
+  - enemies:
+    - enemy: {fileID: 6659382709242767351, guid: 5d9fddde217594cf9997bbc1815f02ae,
+        type: 3}
+      rate: 0.5
+      amount: 15
+    - enemy: {fileID: 6659382709242767351, guid: 199c4611b9dcb485e8846e65cea0a3ed,
+        type: 3}
+      rate: 1
+      amount: 10
+    - enemy: {fileID: 6659382709242767351, guid: 2cc1b562ce6734bad85f61caa5b5bf3d,
+        type: 3}
+      rate: 1
+      amount: 10
+    initialDelay: 15
+  - enemies:
+    - enemy: {fileID: 6659382709242767351, guid: 3a76195b775a140769bf6c222e6ca33b,
+        type: 3}
+      rate: 0.3
+      amount: 10
+    - enemy: {fileID: 6659382709242767351, guid: 5d9fddde217594cf9997bbc1815f02ae,
+        type: 3}
+      rate: 0.5
+      amount: 30
+    initialDelay: 15
+  - enemies:
+    - enemy: {fileID: 6659382709242767351, guid: 3a76195b775a140769bf6c222e6ca33b,
+        type: 3}
+      rate: 0.3
+      amount: 15
+    - enemy: {fileID: 6659382709242767351, guid: 199c4611b9dcb485e8846e65cea0a3ed,
+        type: 3}
+      rate: 1
+      amount: 20
     initialDelay: 15
   statsWaveNumberText: {fileID: 2053337303}
 --- !u!4 &1562651266
